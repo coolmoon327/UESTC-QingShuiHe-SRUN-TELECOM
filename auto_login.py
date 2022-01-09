@@ -75,10 +75,16 @@ class AutoLogin(object):
         # password_box = driver.find_element(by=By.ID, value="pwd")
         # username_box.send_keys(self.username)
         # password_box.send_keys(self.password)
-        driver.execute_script(f'document.getElementById("username").value={self.username}')
-        driver.execute_script(f'document.getElementById("pwd").value={self.password}')
-
-        driver.find_element(by=By.ID, value="SLoginBtn_1").click()  # 登录
+        try:
+            js_config_usr = 'document.getElementById(\"username\").value=\"' + str(self.username) + '\"'
+            js_config_pwd = 'document.getElementById(\"pwd\").value=\"' + str(self.password) + '\"'
+            driver.execute_script(js_config_usr)
+            driver.execute_script(js_config_pwd)
+            driver.find_element(by=By.ID, value="SLoginBtn_1").click()  # �~Y��~U
+        except:
+            print('login wrong')
+            driver.quit()
+            return
         time.sleep(3)
         driver.quit()
         return
