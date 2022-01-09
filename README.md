@@ -7,3 +7,4 @@
 5. 如何使用请参考 [SRUN 项目](https://github.com/RManLuo/srun_auto_login) ，或直接用 python 工具运行 auto_login.py 脚本
 6. 在使用该脚本之前，请确保已经安装 chrome，尤其是 linux 用户需要检查依赖是否都安装完成
 7. 该项目对 macOS 的支持存在兼容性问题，arm Mac 用户需要去 [仓库](http://chromedriver.storage.googleapis.com/index.html) 下载 arm macOS 对应的 Chrome 内核，并手动将 self.path 指定到该内核的位置
+8. 目前在 ubuntu 上用 python3.8 运行，会出现解析问题，需要把 `driver.execute_script(f'document.getElementById("username").value={self.username}')` 换成 `driver.execute_script(f'document.getElementById("username").value="您的账号"')` ，下一行的密码同理
