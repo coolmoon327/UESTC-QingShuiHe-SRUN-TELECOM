@@ -31,13 +31,13 @@ class AutoLogin(object):
         self.options = Options()
         self.options.add_argument('--headless')
         self.options.add_argument('--disable-gpu')
+        self.options.add_argument('--no-sandbox')
         operating_system = platform.platform()
-        # 对 macOS 的识别有问题，mac 用户请删除注释
-        # operating_system = 'Mac'
         if 'Windows' in operating_system:
             self.path = 'webdriver/chromedriver.exe'
-        elif 'Mac' in operating_system:
+        elif 'mac' in operating_system:
             self.path = 'webdriver/chromedriver_mac64'
+            # arm mac 用户请更换该驱动为对应版本
         elif 'Linux' in operating_system:
             self.path = 'webdriver/chromedriver_linux64'
         else:
