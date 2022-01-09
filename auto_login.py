@@ -32,6 +32,8 @@ class AutoLogin(object):
         self.options.add_argument('--headless')
         self.options.add_argument('--disable-gpu')
         self.options.add_argument('--no-sandbox')
+        self.options.add_argument('window-size=1920x1080')
+        self.options.add_argument('--hide-scrollbars')
         operating_system = platform.platform()
         if 'Windows' in operating_system:
             self.path = 'webdriver/chromedriver.exe'
@@ -90,7 +92,7 @@ class AutoLogin(object):
         while i <= config.retry:
             self.logger.info("Start trying times: {}".format(i))
             self._login_srun()
-            time.sleep(5)
+            time.sleep(10)
             status = self._check_network()
             if status:
                 self.logger.info("Loging success")
