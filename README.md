@@ -16,22 +16,23 @@ python >= 3.6
 selenium >= 3.141.0
 ```
 **本地安装的 Chrome 需要和 webdriver 目录下使用的 chromedriver 版本吻合！！！**
+selenium 的环境调试过程较为复杂，推荐使用本项目提供的 docker 镜像，不需要手动配置环境。
 
 ## Usage
 在config.py文件中输入您的账户和密码，然后愉快的开始运行吧。
 
-## WIndows后台运行
+## Windows 后台运行
 ```sh
 pythonw auto_login.py
 ```
 
-## Mac and Linux后台运行
+## Mac & Linux 后台运行
 ```sh
 nohup python3 auto_login.py 2>&1 &
 ```
 
-## 注册windows开机自启
-1. 将auto_login.py 改名成auto_login.pyw，并右键创建快捷方式
+## 注册 Windows 开机自启
+1. 将 auto_login.py 改名成 auto_login.pyw，并右键创建快捷方式
 2. 点击开始--所有程序--启动--右击--打开，将已快捷方式复制到该目录（C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup）下，可能杀毒软件会阻止，选择允许，然后重启电脑即可。
 
 # 二、使用 docker 容器进行部署

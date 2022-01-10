@@ -83,7 +83,7 @@ class AutoLogin(object):
         try:
             driver.get(self.login_gateway)
         except:
-            self.logger.warning("Get gatway out of time....try again soon")
+            self.logger.warning("Get gateway out of time....try again soon")
             return
         time.sleep(3)
         # username_box = driver.find_element(by=By.ID, value="username")
@@ -97,7 +97,7 @@ class AutoLogin(object):
             driver.execute_script(js_config_pwd)
             driver.find_element(by=By.ID, value="SLoginBtn_1").click()  # �~Y��~U
         except:
-            print('login wrong')
+            self.logger.warning("Login error")
             driver.quit()
             return
         time.sleep(3)
