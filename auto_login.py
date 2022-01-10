@@ -12,11 +12,19 @@ from selenium.webdriver.common.by import By
 class AutoLogin(object):
     def __init__(self, username, password):
         if "SRUN_USERNAME" in os.environ:
-            self.username = os.environ["SRUN_USERNAME"]
+            SRUN_USERNAME = os.environ["SRUN_USERNAME"]
+            if len(SRUN_USERNAME) > 3:
+                self.username = SRUN_USERNAME
+            else:
+                self.username = username
         else:
             self.username = username
         if "SRUN_PASSWORD" in os.environ:
-            self.password = os.environ["SRUN_PASSWORD"]
+            SRUN_PASSWORD = os.environ["SRUN_PASSWORD"]
+            if len(SRUN_PASSWORD) > 3:
+                self.password = SRUN_PASSWORD
+            else:
+                self.password = password
         else:
             self.password = password
         
