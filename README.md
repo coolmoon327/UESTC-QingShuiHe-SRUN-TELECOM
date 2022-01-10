@@ -55,6 +55,12 @@ docker build -t docker build -t uestc-srun-telecom:latest .
 docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest
 ```
 
+## NAS 部署
+1. 在 NAS 的 docker 软件中找到本项目上传到 Hub 的 uestc-srun-telecom 镜像：
+<div align="center"><img src="https://gitee.com/coolmoon327/picBed/raw/master/pictures/20220110165355.png" style="zoom: 30%;"></div>
+2. 只需要修改两条环境变量即可使用：
+<div align="center"><img src="https://gitee.com/coolmoon327/picBed/raw/master/pictures/20220110165127.png" style="zoom: 30%;"></div>
+
 # 使用须知
 
 ## What's new
