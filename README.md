@@ -37,17 +37,22 @@ nohup python3 auto_login.py 2>&1 &
 # 二、使用 docker 容器进行部署
 
 ## 方法一：下载 docker 镜像
-（暂未上传镜像，请等待）
+*注：由于镜像中需要完整的 Chrome 环境，整个镜像较大*
+
+```sh
+docker pull coolmoon327/uestc-srun-telecom
+```
 
 ## 方法二：使用 dockerfile 自动部署
+*注：build 过程受网络影响严重，建议直接下载镜像*
 ```sh
 export all_proxy=socks5://代理服务器地址:代理端口
-docker build -t docker build -t coolmoon-uestc-srun-telecom:lastest .
+docker build -t docker build -t uestc-srun-telecom:latest .
 ```
 
 ## 运行镜像
 ```sh
-docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' coolmoon-uestc-srun-telecom:lastest
+docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest
 ```
 
 # 使用须知
@@ -63,11 +68,11 @@ docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' coo
 
 
 ## Docker Build
-1. 在本项目的根目录下使用 `docker build -t docker build -t coolmoon-uestc-srun-telecom:lastest .` 命令可自动生成 docker 镜像，运行容器将直接开启全自动的 SRUN 服务
-2. 若使用 docker，推荐直接在容器中设置环境变量 SRUN_USERNAME 和 SRUN_PASSWORD 的值：`docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' coolmoon-uestc-srun-telecom:lastest`
+1. 在本项目的根目录下使用 `docker build -t docker build -t uestc-srun-telecom:latest .` 命令可自动生成 docker 镜像，运行容器将直接开启全自动的 SRUN 服务
+2. 若使用 docker，推荐直接在容器中设置环境变量 SRUN_USERNAME 和 SRUN_PASSWORD 的值：`docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest`
 3. 如果希望自行构建 docker，可以在 dockerfile 中修改上述环境变量的值为你的账号和密码
 4. 由于使用了官方的 Chrome 镜像，需要在 build 之前设置终端代理，这里以本地 Clash 为例： `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
-5. 整个 build 过程需要 1000s 以上，如果网速较快建议直接下载 image 使用
+5. 整个 build 过程需要 1000s 以上，如果网速较快建议直接 [下载 image](https://hub.docker.com/repository/docker/coolmoon327/uestc-srun-telecom) 使用
 
 
 
