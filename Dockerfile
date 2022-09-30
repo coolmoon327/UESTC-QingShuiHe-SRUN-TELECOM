@@ -7,7 +7,6 @@ ENV TIME_ZONE Asia/Shanghai
 ENV SRUN_USERNAME your_username
 ENV SRUN_PASSWORD your_password
 ARG DEBIAN_FRONTEND=noninteractive
-COPY . .
 
 RUN apt-get update \
 	&& apt-get -f -y install \
@@ -16,15 +15,17 @@ RUN apt-get update \
 
 RUN pip3 install requests selenium 
 
-RUN chmod 777 ./webdriver/chromedriver_linux64 \
-	&& rm -rf ./webdriver/chromedriver.exe \
-	&& rm -rf ./webdriver/chromedriver_mac64 \
-	&& rm -rf ./webdriver/chromedriver_mac64_m1
-
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb --no-check-certificate \
 	&& dpkg -i google-chrome-stable_current_amd64.deb \
 	&& rm -rf google-chrome-stable_current_amd64.deb
 
 RUN apt-get autoclean && apt-get clean && apt-get autoremove
+
+COPY . .
+
+RUN chmod 777 ./webdriver/chromedriver_linux64 \
+	&& rm -rf ./webdriver/chromedriver.exe \
+	&& rm -rf ./webdriver/chromedriver_mac64 \
+	&& rm -rf ./webdriver/chromedriver_mac64_m1
 
 CMD python3 auto_login.py
