@@ -28,7 +28,7 @@ class AutoLogin(object):
         else:
             self.password = password
         
-        self.login_gateway = "http://172.25.249.8"
+        self.login_gateway = "http://172.25.249.64"
 
         if config.log:  # 记录log
             self.logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ class AutoLogin(object):
     def _check_network(self):
         '''
         检查网络是否畅通
-        :return: Ture为畅通，False为不畅通。
+        :return: Ture为畅通, False为不畅通。
         '''
         try:
             req = requests.get('http://www.baidu.com', timeout=1)
@@ -126,12 +126,14 @@ class AutoLogin(object):
             raise Exception("Out of trying times")
 
     def start(self):
+        print("=====\n注意: 记得去 https://chromedriver.chromium.org/downloads 更新和您 chrome 版本一样的 webdriver, 并替换 ./webdriver 文件夹中的对应文件\n=====")
         self.logger.info("Start watching network status")
         while True:
             # check是否掉线
-            self.logger.info("Checking network")
+            # self.logger.info("Checking network")
             if self._check_network():
-                self.logger.info("Network is good")
+                # self.logger.info("Network is good")
+                pass
             else:
                 self.logger.info("Network is disconnected. Try login now.")
                 self._login()  # 重新登录

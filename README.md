@@ -5,7 +5,11 @@
   </a>
 </p>
 
-> 电子科技大学寝室网络（电信）自动后台常驻保证在线，支持 windows、linux、mac(x86)。mac(m1) 用户请自行更换 webdriver 目录下的 chromedriver_mac64 驱动。
+> 电子科技大学寝室网络（电信）自动后台常驻保证在线，支持 windows、linux、mac(x86)。使用前请用户请自行从 [官网下载](https://chromedriver.chromium.org/downloads) 更换 webdriver 目录下对应的 chromedriver 驱动, **一定要和 [Chrome 版本](chrome://settings/help) 对应上**。
+
+# 更新
+- 2022.9.30: 电信入网登陆地址发生变动 172.25.249.8 -> 172.25.249.64
+> 如何查看入网地址? 当无法正常使用该工具时, 请手动在浏览器用 aaa.uestc.edu.cn 进入入网激活页面, 然后将该页面的 IP 复制进 auto_login.py 相应位置即可（self.login_gateway）。
 
 # 一、使用 python 脚本完成自动化接入
 
@@ -75,7 +79,7 @@ docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' ues
 
 
 ## Docker Build
-1. 在本项目的根目录下使用 `docker build -t docker build -t uestc-srun-telecom:latest .` 命令可自动生成 docker 镜像，运行容器将直接开启全自动的 SRUN 服务
+1. 在本项目的根目录下使用 `docker build -t uestc-srun-telecom:latest .` 命令可自动生成 docker 镜像，运行容器将直接开启全自动的 SRUN 服务
 2. 若使用 docker，推荐直接在容器中设置环境变量 SRUN_USERNAME 和 SRUN_PASSWORD 的值：`docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest`
 3. 如果希望自行构建 docker，可以在 dockerfile 中修改上述环境变量的值为你的账号和密码
 4. 由于使用了官方的 Chrome 镜像，需要在 build 之前设置终端代理，这里以本地 Clash 为例： `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
