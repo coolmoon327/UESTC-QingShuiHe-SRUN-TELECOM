@@ -51,13 +51,25 @@ docker pull coolmoon327/uestc-srun-telecom
 ## 方法二：使用 dockerfile 自动部署
 *注：build 过程受网络影响严重，建议直接下载镜像*
 ```sh
+# 如果发现没法成功 build, 很有可能是 chrome 相关组件需要梯子才能下载
+# 需要在执行 docker build 前配置 terminal 的代理, 或者在路由器上配置代理
+# 注: terminal 不会自动跟随系统代理设置
 export all_proxy=socks5://代理服务器地址:代理端口
+
+# build 命令
 docker build -t docker build -t uestc-srun-telecom:latest .
 ```
 
 ## 运行镜像
 ```sh
-docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest
+# 通过环境变量运行 docker 镜像
+docker run -e SRUN_USERNAME='手机号' -e SRUN_PASSWORD='默认为12345678' uestc-srun-telecom
+
+# 示例 1: 使用 dockerhub 的镜像
+docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' coolmoon327/uestc-srun-telecom:latest
+
+# 示例 2: 使用自己 build 的镜像
+docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom
 ```
 
 ## NAS 部署
