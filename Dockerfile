@@ -1,6 +1,6 @@
 FROM ubuntu
 LABEL author="coolmoon327"
-LABEL version="4.3"
+LABEL version="4.4"
 LABEL description="用于在电子科技大学清水河校区实现寝室电信宽带网络的全自动接入"
 WORKDIR /home
 ENV TZ Asia/Shanghai
