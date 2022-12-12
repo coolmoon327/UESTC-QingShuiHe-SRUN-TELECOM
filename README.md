@@ -8,6 +8,8 @@
 > 电子科技大学寝室网络（电信）自动后台常驻保证在线，支持 windows、linux、mac(x86)。使用前请用户请自行从 [官网下载](https://chromedriver.chromium.org/downloads) 更换 webdriver 目录下对应的 chromedriver 驱动, **一定要和 Chrome 版本 (chrome://settings/help) 对应上**。
 
 # 更新
+- 2022.12.12: 修复 issue #2 提到的 dockerfile 的问题
+
 - 2022.9.30: 电信入网登陆地址发生变动 172.25.249.8 -> 172.25.249.64
 > 如何查看入网地址? 当无法正常使用该工具时, 请手动在浏览器进入入网登陆页面, 然后将该页面的 IP 复制进 auto_login.py 相应位置即可（self.login_gateway）。
 

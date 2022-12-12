@@ -3,7 +3,7 @@ LABEL author="coolmoon327"
 LABEL version="4.3"
 LABEL description="用于在电子科技大学清水河校区实现寝室电信宽带网络的全自动接入"
 WORKDIR /home
-ENV TIME_ZONE Asia/Shanghai
+ENV TZ Asia/Shanghai
 ENV SRUN_USERNAME your_username
 ENV SRUN_PASSWORD your_password
 ARG DEBIAN_FRONTEND=noninteractive
