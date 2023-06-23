@@ -4,7 +4,9 @@ import time
 import logging
 import platform
 import requests
+import update_chrome_driver
 from selenium import webdriver
+from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -126,7 +128,6 @@ class AutoLogin(object):
             raise Exception("Out of trying times")
 
     def start(self):
-        print("=====\n注意: 记得去 https://chromedriver.chromium.org/downloads 更新和您 chrome 版本一样的 webdriver, 并替换 ./webdriver 文件夹中的对应文件\n=====")
         self.logger.info("Start watching network status")
         while True:
             # check是否掉线
@@ -141,5 +142,11 @@ class AutoLogin(object):
 
 
 if __name__ == "__main__":
-    login = AutoLogin(config.username, config.passowrd)
-    login.start()
+    try:
+        login = AutoLogin(config.username, config.passowrd)
+        login.start()
+    except SessionNotCreatedException:
+        update_chrome_driver.update_chrome_driver()
+        login = AutoLogin(config.username, config.passowrd)
+        login.start()
+        
