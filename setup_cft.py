@@ -94,7 +94,8 @@ def get_platform() -> str:
                     platform_both = "linux64"
         case _:
             logger.error(
-                f"Unsupported Platform: {'\t'.join([system,arch[0],arch[1],machine])}"
+                "Unsupported Platform: "
+                + "\t".join([system, arch[0], arch[1], machine])
             )
 
     return platform_both
