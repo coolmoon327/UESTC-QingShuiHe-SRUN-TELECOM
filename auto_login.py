@@ -44,7 +44,7 @@ class AutoLogin(object):
             self.logger.addHandler(handler)
             if config.debug:  # debug 在控制台输出
                 console = logging.StreamHandler()
-                console.setLevel(logging.DEBUG)
+                console.setLevel(logging.INFO)
                 self.logger.addHandler(console)
 
         self.options = Options()
@@ -142,6 +142,8 @@ class AutoLogin(object):
 
 
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
+
     # Parse arguments
     parser = argparse.ArgumentParser(
         prog="auto_login.py",
@@ -154,14 +156,15 @@ if __name__ == "__main__":
         action="store_true",
         help="download/update chrome for test",
     )
+
     args = parser.parse_args()
-    logging.debug(args)
+    logger.debug(args)
 
     if args.update_cft:
         try:
             fetch_cft()
         except Exception:
-            logging.error("Update chrome for test failed")
+            logger.error("Update chrome for test failed")
 
     login = AutoLogin(config.username, config.passowrd)
     login.start()
