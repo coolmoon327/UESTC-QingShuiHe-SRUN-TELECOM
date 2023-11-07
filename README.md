@@ -23,7 +23,7 @@
 ```sh
 requests
 argparse
-python >= 3.6
+python >= 3.10
 selenium >= 3.141.0
 ```
 ~~**本地安装的 Chrome 需要和 webdriver 目录下使用的 chromedriver 版本吻合！！！**~~
