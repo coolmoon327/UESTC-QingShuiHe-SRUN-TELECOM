@@ -1,18 +1,22 @@
 import os
+import argparse
 import config
 import time
 import logging
-import platform
 import requests
-import update_chrome_driver
 from selenium import webdriver
-from selenium.common.exceptions import SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
+from setup_cft import fetch_cft, get_platform
+
+
 class AutoLogin(object):
     def __init__(self, username, password):
+        self.portal_test_url: str = "http://example.com"
+        self.login_gateway: str = "http://172.25.249.64"
+
         if "SRUN_USERNAME" in os.environ:
             SRUN_USERNAME = os.environ["SRUN_USERNAME"]
             if len(SRUN_USERNAME) > 3:
@@ -29,15 +33,13 @@ class AutoLogin(object):
                 self.password = password
         else:
             self.password = password
-        
-        self.login_gateway = "http://172.25.249.64"
 
         if config.log:  # 记录log
             self.logger = logging.getLogger(__name__)
             self.logger.setLevel(level=logging.INFO)
             handler = logging.FileHandler(os.path.join(config.log_path, "log.txt"))
             handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+            formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
             if config.debug:  # debug 在控制台输出
@@ -46,31 +48,25 @@ class AutoLogin(object):
                 self.logger.addHandler(console)
 
         self.options = Options()
-        self.options.add_argument('--headless')
-        self.options.add_argument('--disable-gpu')
-        self.options.add_argument('--no-sandbox')
-        self.options.add_argument('window-size=1920x1080')
-        self.options.add_argument('--hide-scrollbars')
-        operating_system = platform.platform()
-        if 'Windows' in operating_system:
-            self.path = 'webdriver/chromedriver.exe'
-        elif 'mac' in operating_system:
-            self.path = 'webdriver/chromedriver_mac64'
-            # arm mac 用户请更换该驱动为对应版本
-        elif 'Linux' in operating_system:
-            self.path = 'webdriver/chromedriver_linux64'
-        else:
-            self.logger.warning("Not support this system :{}".format(operating_system))
-            raise Exception("Not support this system :{}".format(operating_system))
+        arguments = "--headless --disable-gpu --no-sandbox window-size=1920x1080 --hide-scrollbars"
+        for arg in arguments.split():
+            self.options.add_argument(arg)
+
+        chrome_platform = get_platform()
+        filename_ext = ".exe" if "win" in chrome_platform else ""
+        self.path = (
+            f"webdriver/chromedriver-{chrome_platform}/chromedriver{filename_ext}"
+        )
+        self.options.binary_location = f"webdriver/chrome-headless-shell-{chrome_platform}/chrome-headless-shell{filename_ext}"
 
     def _check_network(self):
-        '''
+        """
         检查网络是否畅通
         :return: Ture为畅通, False为不畅通。
-        '''
+        """
         try:
-            req = requests.get('http://www.baidu.com', timeout=1)
-            if 'baidu' in req.text:
+            req = requests.get(self.portal_test_url, timeout=3)
+            if req.status_code == 200:
                 return True
             else:
                 return False
@@ -93,8 +89,12 @@ class AutoLogin(object):
         # username_box.send_keys(self.username)
         # password_box.send_keys(self.password)
         try:
-            js_config_usr = 'document.getElementById(\"username\").value=\"' + str(self.username) + '\"'
-            js_config_pwd = 'document.getElementById(\"pwd\").value=\"' + str(self.password) + '\"'
+            js_config_usr = (
+                'document.getElementById("username").value="' + str(self.username) + '"'
+            )
+            js_config_pwd = (
+                'document.getElementById("pwd").value="' + str(self.password) + '"'
+            )
             driver.execute_script(js_config_usr)
             driver.execute_script(js_config_pwd)
             driver.find_element(by=By.ID, value="SLoginBtn_1").click()  # �~Y��~U
@@ -107,10 +107,10 @@ class AutoLogin(object):
         return
 
     def _login(self):
-        '''
+        """
         登录网络
         :return: 成功返回True 失败返回 False
-        '''
+        """
         i = 1
         while i <= config.retry:
             self.logger.info("Start trying times: {}".format(i))
@@ -142,11 +142,29 @@ class AutoLogin(object):
 
 
 if __name__ == "__main__":
-    try:
-        login = AutoLogin(config.username, config.passowrd)
-        login.start()
-    except SessionNotCreatedException:
-        update_chrome_driver.update_chrome_driver()
-        login = AutoLogin(config.username, config.passowrd)
-        login.start()
-        
+    logger = logging.getLogger(__name__)
+
+    # Parse arguments
+    parser = argparse.ArgumentParser(
+        prog="auto_login.py",
+        description="Automated logging in for China Telecom's portal authentication in UESTC student apartments.",
+    )
+    parser.add_argument(
+        "-u",
+        "--update-cft",
+        required=False,
+        action="store_true",
+        help="download/update chrome for test",
+    )
+
+    args = parser.parse_args()
+    logger.debug(args)
+
+    if args.update_cft:
+        try:
+            fetch_cft()
+        except Exception:
+            logger.error("Update chrome for test failed")
+
+    login = AutoLogin(config.username, config.passowrd)
+    login.start()
