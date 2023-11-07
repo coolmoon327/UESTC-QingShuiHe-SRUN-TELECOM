@@ -84,9 +84,11 @@ def get_platform() -> str:
                     platform_both = "win32"
         case "Darwin":
             match machine:
-                case "aarch64":
+                case "arch64":
                     platform_both = "mac-arm64"
                 case "AMD64":
+                    platform_both = "mac-x64"
+                case "x86_64":
                     platform_both = "mac-x64"
         case "Linux":
             match arch[0]:

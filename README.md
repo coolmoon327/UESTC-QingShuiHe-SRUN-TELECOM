@@ -29,7 +29,7 @@ selenium >= 3.141.0
 ~~**本地安装的 Chrome 需要和 webdriver 目录下使用的 chromedriver 版本吻合！！！**~~
 ~~selenium 的环境调试过程较为复杂，推荐使用本项目提供的 docker 镜像，不需要手动配置环境。~~\
 
-Chrome for testing 及 Chrome driver 可通过 `python .\setup_cft.py`, `auto_login.py` 自动获取。
+Chrome for testing 及 Chrome driver 可通过 `python .\setup_cft.py`, `auto_login.py` 自动获取。获取到的 `./webdriver/chromedriver-xxx/chromedriver` 与 `./webdriver/chrome-headless-shell-xxx/chrome-headless-shell` 文件需要设置权限（如 chmod 777）。
 
 （不推荐）此外也可手动从 [googlechromelabs](https://googlechromelabs.github.io/chrome-for-testing/) 下载。需将对应平台、相互匹配的 `chrome-headless-shell.zip` 及 `chromedriver.zip` 下载并解压至 ./webdriver/。 
 
@@ -70,7 +70,7 @@ docker pull coolmoon327/uestc-srun-telecom
 export all_proxy=socks5://代理服务器地址:代理端口
 
 # build 命令
-docker build -t docker build -t uestc-srun-telecom:latest .
+docker build -t uestc-srun-telecom:latest .
 ```
 
 ## 运行镜像
