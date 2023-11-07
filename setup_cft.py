@@ -75,6 +75,7 @@ def get_platform() -> str:
 
     platform_both = "unknown"
 
+    # see https://en.wikipedia.org/wiki/Uname
     match system:
         case "Windows":
             match arch[0]:
@@ -84,9 +85,12 @@ def get_platform() -> str:
                     platform_both = "win32"
         case "Darwin":
             match machine:
-                case "aarch64":
-                    platform_both = "mac-arm64"
-                case "AMD64":
+                case "arm64": # what `uname -m`` returns on Big Sur and Monterey 
+                    platform_both = "mac-arm64" 
+                # case "AMD64":
+                #     platform_both = "mac-x64"
+                # not for macos
+                case "x86_64":
                     platform_both = "mac-x64"
         case "Linux":
             match arch[0]:

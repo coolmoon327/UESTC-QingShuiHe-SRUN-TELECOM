@@ -9,12 +9,11 @@ ENV SRUN_PASSWORD your_password
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-	&& apt-get -f -y install \
-	&& apt-get install python3.10 python3-pip --assume-yes --fix-missing 
+	&& apt-get install --assume-yes --fix-missing \
+	   python3.10 python3-pip libglib2.0-0 libnss3\
+	&& apt-get autoclean && apt-get clean && apt-get autoremove
 
 RUN pip install requests selenium argparse
-
-RUN apt-get autoclean && apt-get clean && apt-get autoremove
 
 COPY . .
 
