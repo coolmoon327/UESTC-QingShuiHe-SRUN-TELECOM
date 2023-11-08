@@ -3,7 +3,7 @@ import argparse
 import config
 import time
 import logging
-import requests
+import socket
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -14,7 +14,7 @@ from setup_cft import fetch_cft, get_platform
 
 class AutoLogin(object):
     def __init__(self, username, password):
-        self.portal_test_url: str = "http://example.com"
+        self.portal_test_host: str = "1.1.1.1"
         self.login_gateway: str = "http://172.25.249.64"
 
         if "SRUN_USERNAME" in os.environ:
@@ -65,12 +65,12 @@ class AutoLogin(object):
         :return: Ture为畅通, False为不畅通。
         """
         try:
-            req = requests.get(self.portal_test_url, timeout=3)
-            if req.status_code == 200:
-                return True
-            else:
-                return False
-        except:
+            socket.setdefaulttimeout(3)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(
+                (self.portal_test_host, 53)
+            )
+            return True
+        except socket.error as exception:
             return False
 
     def _login_srun(self):
