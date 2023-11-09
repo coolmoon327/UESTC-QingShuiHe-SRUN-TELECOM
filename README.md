@@ -5,10 +5,10 @@
   </a>
 </p>
 
-> 电子科技大学寝室网络（电信）自动后台常驻保证在线，支持 linux64, mac-arm64, mac-x64, win32, win64。~~如果 chromium 内核自动更新失败，请从 [官网下载](https://chromedriver.chromium.org/downloads) 更换 webdriver 目录下对应的 chromedriver 驱动, **一定要和 Chrome 版本 (chrome://settings/help) 对应上**~~ 
+> 电子科技大学寝室网络（电信）自动后台常驻保证在线，支持 linux64, mac-arm64, mac-x64, win32, win64。
 
 # 更新
-- 2023.7.11: 转为使用[独立的无头chrome for testing及chromedriver](https://developer.chrome.com/blog/chrome-for-testing/)，不再需要完整的chrome环境或配置对应版本的webdriver。
+- 2023.11.7: 转为使用[独立的无头chrome for testing及chromedriver](https://developer.chrome.com/blog/chrome-for-testing/)，不再需要完整的chrome环境或配置对应版本的webdriver。
 
 - 2023.6.23: [@yao-yun](https://github.com/yao-yun) 提供了 chromium 内核的自动检测与下载的更新，无需用户自行配置驱动。
 
@@ -26,12 +26,21 @@ argparse
 python >= 3.10
 selenium >= 3.141.0
 ```
-~~**本地安装的 Chrome 需要和 webdriver 目录下使用的 chromedriver 版本吻合！！！**~~
-~~selenium 的环境调试过程较为复杂，推荐使用本项目提供的 docker 镜像，不需要手动配置环境。~~\
 
-Chrome for testing 及 Chrome driver 可通过 `python .\setup_cft.py`, `auto_login.py` 自动获取。获取到的 `./webdriver/chromedriver-xxx/chromedriver` 与 `./webdriver/chrome-headless-shell-xxx/chrome-headless-shell` 文件需要设置权限（如 chmod 777）。
+## Chrome for Testing / Chromedriver 配置
 
-（不推荐）此外也可手动从 [googlechromelabs](https://googlechromelabs.github.io/chrome-for-testing/) 下载。需将对应平台、相互匹配的 `chrome-headless-shell.zip` 及 `chromedriver.zip` 下载并解压至 ./webdriver/。 
+**方法 A** Chrome for testing 及 Chrome driver 可通过 `python .\setup_cft.py`, `auto_login.py` 自动获取。获取到的 `./webdriver/chromedriver-xxx/chromedriver` 与 `./webdriver/chrome-headless-shell-xxx/chrome-headless-shell` 文件需要设置权限（如 chmod 777）。
+
+**方法 B**（不推荐）此外也可手动从 [googlechromelabs](https://googlechromelabs.github.io/chrome-for-testing/) 下载。需将对应平台、相互匹配的 `chrome-headless-shell.zip` 及 `chromedriver.zip` 下载并解压至 ./webdriver/。 
+
+在Linux下，通过方法 A 或方法 B 完成 Chrome for testing 及 Chrome driver 的下载后，需配置 Chrome for testing 的依赖库：
+```sh
+apt-get install -y unzip xvfb libxi6 libgconf-2-4 jq libjq1 libonig5 libxkbcommon0 libxss1 libglib2.0-0 libnss3 \
+  libfontconfig1 libatk-bridge2.0-0 libatspi2.0-0 libgtk-3-0 libpango-1.0-0 libgdk-pixbuf2.0-0 libxcomposite1 \
+  libxcursor1 libxdamage1 libxtst6 libappindicator3-1 libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libxfixes3 \
+  libdbus-1-3 libexpat1 libgcc1 libnspr4 libgbm1 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxext6 \
+  libxrandr2 libxrender1 gconf-service ca-certificates fonts-liberation libappindicator1 lsb-release xdg-utils
+```
 
 **需要能访问 [googlechromelabs.github.io](googlechromelabs.github.io) 的网络环境**
 
@@ -97,10 +106,9 @@ docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' ues
 1. 本项目基于 [SRUN 项目](https://github.com/RManLuo/srun_auto_login) 开发
 2. 相对之前的 UESTC SRUN 项目，本项目重新在 2022 年测试电子科技大学清水河校区电信网络的接入网页，网址和 id 均有变化（经测试，在清水河校区无法使用旧的项目）
 3. 在清水河校区的接入网页下，本项目为 input 修改 value 值，更改代码为 ` driver.execute_script(f'document.getElementById("username").value={self.username}')`
-4. ~~web driver 在 [google 官方 api 仓库](http://chromedriver.storage.googleapis.com/index.html) 下载，请下载等于或低于本机 chrome 版本的 driver，下载后替换 webdriver 目录下的对应驱动文件~~
-5. 如何使用请参考 [SRUN 项目](https://github.com/RManLuo/srun_auto_login) ，或直接用 python 工具运行 auto_login.py 脚本
-6. 在使用该脚本之前，请确保已经安装 chrome，尤其是 linux 用户需要检查依赖是否都安装完成
-7. ~~该项目对 macOS 的支持存在兼容性问题，arm Mac 用户需要去 [仓库](http://chromedriver.storage.googleapis.com/index.html) 下载 arm macOS 对应的 Chrome 内核，并手动将 self.path 指定到该内核的位置（或者直接替换 chromedriver_mac64）~~
+4. 如何使用请参考 [SRUN 项目](https://github.com/RManLuo/srun_auto_login) ，或直接用 python 工具运行 auto_login.py 脚本
+5. 在使用该脚本之前，请确保已经正确配置 chrome for testing 及 chromedriver，尤其是 linux 用户需要检查依赖是否都安装完成
+6. 转为使用[独立的无头chrome for testing及chromedriver](https://developer.chrome.com/blog/chrome-for-testing/)，不再需要完整的chrome环境或手动配置对应版本的webdriver。
 
 
 ## Docker Build
@@ -108,7 +116,7 @@ docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' ues
 2. 若使用 docker，推荐直接在容器中设置环境变量 SRUN_USERNAME 和 SRUN_PASSWORD 的值：`docker run -e SRUN_USERNAME='your_username' -e SRUN_PASSWORD='your_password' uestc-srun-telecom:latest`
 3. 如果希望自行构建 docker，可以在 dockerfile 中修改上述环境变量的值为你的账号和密码
 4. 由于使用了官方的 Chrome 镜像，需要在 build 之前设置终端代理，这里以本地 Clash 为例： `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
-5. 整个 build 过程需要 ~~1000s 以上~~ 约46s，如果网速较快建议直接 [下载 image](https://hub.docker.com/repository/docker/coolmoon327/uestc-srun-telecom) 使用
+5. 整个 build 过程需要约10min，如果网速较快建议直接 [下载 image](https://hub.docker.com/repository/docker/coolmoon327/uestc-srun-telecom) 使用
 
 
 
