@@ -32,7 +32,7 @@ def get_cft_driver(
 
     chrome_dir, driver_dir = search_cft(target_dir)
     if chrome_dir == "" and driver_dir == "":
-        logging.debug(f"No current installed chrome in {target_dir}, try downloading")
+        logging.warning(f"No current installed chrome in {target_dir}, try downloading")
         chrome_dir, driver_dir = fetch_cft(target_dir, cft_ver)
 
     logging.debug(f"Chrome binary:{chrome_dir}")

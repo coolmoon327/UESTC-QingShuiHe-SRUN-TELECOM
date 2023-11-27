@@ -164,7 +164,10 @@ def fetch_cft(
             logger.info(f"Granted permission to {hdless_cft_dir} {driver_cft_dir}`")
         else:
             logger.warning(
-                f"For unix, run `chmod 777 {hdless_cft_dir} {driver_cft_dir}`"
+                f"Excutable permission is not granted to {hdless_cft_dir} {driver_cft_dir}`, running directly will fail. "
+            )
+            logger.warning(
+                "Please run `chmod 777 {hdless_cft_dir} {driver_cft_dir}` to prevent failure"
             )
 
     return (hdless_cft_dir, driver_cft_dir)
