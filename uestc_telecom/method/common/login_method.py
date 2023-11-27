@@ -29,7 +29,7 @@ class AutoLogin(object):
 
     def login(self) -> bool:
         """Try login for once, and return true/false for success/failure"""
-        self.logger.info("Try logging in")
+        self.logger.info("Logging in")
         return False
 
     def monitor(self, interval: int = 10):
@@ -40,9 +40,9 @@ class AutoLogin(object):
         """
         self.logger.info("Start monitoring network status")
         while True:
-            self.logger.info("Checking connectivity")
+            self.logger.debug("Checking connectivity")
             if self._have_internet():
-                self.logger.info("Connected to internet")
+                self.logger.debug("Connected to internet")
                 pass
             else:
                 self.logger.info("Disconnected to internet")

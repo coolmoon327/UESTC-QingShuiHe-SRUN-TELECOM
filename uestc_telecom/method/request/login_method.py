@@ -26,23 +26,24 @@ class AutoLogin(BaseAutoLogin):
     def login(self) -> bool:
         self.logger.info("Logging via constructing POST")
         try:
-            self.logger.debug(f"Getting necessary info from {self.login_gateway + '/eportal/redirectortosuccess.jsp'}")
+            self.logger.debug(
+                f"Getting necessary info from {self.login_gateway + '/eportal/redirectortosuccess.jsp'}"
+            )
             self.__get_info(self.login_gateway + "/eportal/redirectortosuccess.jsp")
             self.logger.debug(f"Info got: {self.query_string}")
         except NoInfoforLogin:
             self.logger.warning("Failed to fetch connection info")
             return False
         except Exception as exception:
-            self.logger.warning(f"Unknown error: {exception}")
+            self.logger.warning(
+                f"Error: {exception}, the automatic retries later may fix this"
+            )
             return False
         self.header = self.__construct_request_header(
             self.login_gateway, self.query_string
         )
         self.logger.debug(f"Header constructed: {self.header}")
-        e, m = (
-            0x10001,
-            0x94DD2A8675FB779E6B9F7103698634CD400F27A154AFA67AF6166A43FC26417222A79506D34CACC7641946ABDA1785B7ACF9910AD6A0978C91EC84D40B71D2891379AF19FFB333E7517E390BD26AC312FE940C340466B4A5D4AF1D65C3B5944078F96A1A51A5A53E4BC302818B7C9F63C4A1B07BD7D874CEF1C3D4B2F5EB7871,
-        )
+        e, m = self.__get_pubkey()
         self.encrypted_passwd = self.__encrypt_passwd(m, e, self.password)
         self.loginpayload = self.__construct_login_payload(
             self.username, self.encrypted_passwd, self.query_string
@@ -56,19 +57,16 @@ class AutoLogin(BaseAutoLogin):
                 data=self.loginpayload,
             )
         except Exception as exception:
-            self.logger.warning(
-                f"Error when sending POST request to log in: {exception}"
-            )
+            self.logger.warning(f"Error when sending request to log in: {exception}")
             return False
 
         if response.status_code == 200:
-            self.logger.info("POST login successful")
+            self.logger.info("Login via construting request successful")
             self.logger.debug("Response content:", response.text.encode("uft-8"))
             return True
         else:
-            self.logger.info(
-                "POST request failed with status code:", response.status_code
-            )
+            self.logger.info("Request failed with status code:", response.status_code)
+            self.logger.debug(f"Response body: {response.text}")
             return False
 
     def __get_info(
@@ -134,6 +132,12 @@ class AutoLogin(BaseAutoLogin):
         return payload
 
     def __get_pubkey(self) -> Tuple[int, int]:
+        return (
+            0x10001,
+            0x94DD2A8675FB779E6B9F7103698634CD400F27A154AFA67AF6166A43FC26417222A79506D34CACC7641946ABDA1785B7ACF9910AD6A0978C91EC84D40B71D2891379AF19FFB333E7517E390BD26AC312FE940C340466B4A5D4AF1D65C3B5944078F96A1A51A5A53E4BC302818B7C9F63C4A1B07BD7D874CEF1C3D4B2F5EB7871,
+        )
+        # the key has not changed for a long time, and the method below is highly likely to be resetted
+        # TODO fix this
         response = requests.get(
             self.login_gateway + "/eportal/InterFace.do?method=pageInfo",
             headers=self.header,
