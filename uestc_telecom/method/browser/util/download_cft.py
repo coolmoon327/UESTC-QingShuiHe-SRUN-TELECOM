@@ -1,5 +1,5 @@
 from genericpath import isfile
-import requests, json, logging, os
+import requests, json, logging, os, ctypes
 from zipfile import ZipFile
 from typing import Tuple
 from .get_platform import get_platform
@@ -7,6 +7,13 @@ from .get_platform import get_platform
 cft_json_endpoint = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
 
 logger = logging.getLogger(__name__)
+
+
+def __isAdmin() -> bool:
+    try:
+        return os.getuid() == 0  # type: ignore
+    except AttributeError:
+        return ctypes.windll.shell32.IsUserAnAdmin() != 0
 
 
 class VersionNotFoundError(Exception):
@@ -148,5 +155,16 @@ def fetch_cft(
         f"webdriver/chrome-headless-shell-{platform_both}/chrome-headless-shell"
     )
     driver_cft_dir = f"webdriver/chromedriver-{platform_both}/chromedriver"
+
+    ## Automactically grant the permission if ran privileged, else return a warning
+    if platform_both in ["linux64", "mac-x64", "mac-arm64"]:
+        if __isAdmin():
+            os.chmod(hdless_cft_dir, 777)
+            os.chmod(driver_cft_dir, 777)
+            logger.info(f"Granted permission to {hdless_cft_dir} {driver_cft_dir}`")
+        else:
+            logger.warning(
+                f"For unix, run `chmod 777 {hdless_cft_dir} {driver_cft_dir}`"
+            )
 
     return (hdless_cft_dir, driver_cft_dir)

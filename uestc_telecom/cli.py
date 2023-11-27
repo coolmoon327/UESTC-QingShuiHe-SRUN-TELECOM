@@ -112,7 +112,6 @@ if __name__ == "__main__":
         try:
             chrome_dir, driver_dir = fetch_cft("./webdriver")
             logger.info(f"CFT installed in {chrome_dir}, {driver_dir}")
-            logger.info(f"For unix, run `chmod 777 {chrome_dir} {driver_dir}`")
             exit(0)
         except Exception as exception:
             logger.error("Error when downloading CFT")
