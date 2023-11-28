@@ -1,6 +1,6 @@
 
 
-<h1 align="center">YALUTN: <i>Yet Another Loginer for UESTC Telecom Network</i></h1>
+<h1 align="center">电子科技大学清水河校区寝室电信网络自动接入工具</h1>
 
 <p>
   <a href="https://mit-license.org/">
@@ -79,8 +79,8 @@ apt-get install -y unzip xvfb libxi6 libgconf-2-4 jq libjq1 libonig5 libxkbcommo
 
 ```sh
 # Clone this project to local
-git clone https://github.com/coolmoon327/UESTC-QingShuiHe-SRUN-TELECOM.git ./YALUTN
-cd ./YALUTN
+git clone https://github.com/coolmoon327/UESTC-QingShuiHe-SRUN-TELECOM.git 
+cd "./UESTC-QingShuiHe-SRUN-TELECOM"
 
 # Install chrome for testing and its chrome driver (optional, needed for using brower login mode)
 # the previledge is for automatic granting of excutable permission
@@ -94,8 +94,8 @@ python3 uestc_telecom/cli.py --method request --userid 19912344321 --password 12
 
 ```powershell
 # Clone this project to local
-git clone "https://github.com/coolmoon327/UESTC-QingShuiHe-SRUN-TELECOM.git" ".\YALUTN"
-Set-Location .\YALUTN
+git clone "https://github.com/coolmoon327/UESTC-QingShuiHe-SRUN-TELECOM.git"
+Set-Location ".\UESTC-QingShuiHe-SRUN-TELECOM"
 
 # Install chrome for testing and its chrome driver (optional, needed for using brower login mode)
 python3 uestc_telecom\cli.py -u
@@ -121,23 +121,15 @@ python3 uestc_telecom\cli.py --method request --userid 19912344321 --password 12
 
 #### Windows 后台运行
 
-<details>
-
 ```powershell
 pythonw auto_login.py
 ```
 
-</details>
-
 #### Unix 后台运行
-
-<details>
 
 ```sh
 nohup python3 auto_login.py 2>&1 &
 ```
-
-</details>
 
 #### Winsw
 
