@@ -1,10 +1,8 @@
-from enum import auto
 import logging
 from logging.handlers import RotatingFileHandler
 import argparse
 import os
 import sys
-from importlib import import_module
 from method import BrowserAutoLogin, RequestAutoLogin
 
 logger = logging.getLogger(__name__)
@@ -62,6 +60,12 @@ def get_argparser() -> argparse.ArgumentParser:
         required=False,
         default="http://172.25.249.64",
         help="address of the portal page, should have scheme (e.g. 'http://...')",
+    )
+    parser.add_argument(
+        "--interval",
+        action="store",
+        default=10,
+        help="interval (s) for connectivity check / retry",
     )
     parser.add_argument(
         "--debug",
@@ -148,4 +152,4 @@ if __name__ == "__main__":
         case _:
             raise ValueError("Invalid login method")
 
-    auto_login.monitor()
+    auto_login.monitor(interval=int(arguments.interval))
