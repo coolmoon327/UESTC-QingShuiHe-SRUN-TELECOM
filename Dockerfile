@@ -8,17 +8,25 @@ ENV SRUN_USERNAME your_username
 ENV SRUN_PASSWORD your_password
 ENV SRUN_METHOD=request
 ENV EXTRA_ARGS=
-ARG DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractivez
+ARG SLIM=0
 
 COPY . .
 
-RUN apt-get update \
+RUN apt-get update\
 	&& apt-get install --assume-yes --fix-missing python3.10 python3-pip \
-	&& apt-get install --assume-yes --fix-missing $(cat cft_dep) \
-	&& apt-get autoclean && apt-get clean && apt-get autoremove
+	&& 	if [[ $SLIM = 0 ]] ; \
+	then apt-get install --assume-yes --fix-missing $(cat cft_dep) ; \
+	fi \
+	&& apt-get autoclean && apt-get clean && apt-get autoremove 
 
-RUN pip install requests selenium
+RUN if [[ $SLIM = 0 ]] ; \
+	then pip install requests selenium ; \
+	else pip install requests; \
+	fi
 
-RUN python3.10 uestc_telecom/cli.py -u
+RUN if [[ $SLIM = 0 ]] ; \
+	then python3.10 uestc_telecom/cli.py -u ; \
+	fi
 
 CMD python3.10 uestc_telecom/cli.py --method $SRUN_METHOD --userid $SRUN_USERNAME --password $SRUN_PASSWORD $EXTRA_ARGS
