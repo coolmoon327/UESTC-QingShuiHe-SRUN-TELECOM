@@ -44,6 +44,29 @@
 
 ## 如何使用？
 
+### Usage
+
+```
+usage: cli.py [-h] [-u] [-i USERID] [-p PASSWORD] [--method METHOD] [-g LOGIN_GATEWAY] [--interval INTERVAL] [--debug] [--silent] [--logfile LOGFILE]
+
+Automated logging in for China Telecom's portal authentication in UESTC student apartments.
+
+options:
+  -h, --help            show this help message and exit
+  -u, --update-cft      (legacy) download/update newest chrome for test and corresponding driver
+  -i USERID, --userid USERID
+                        username
+  -p PASSWORD, --password PASSWORD
+                        password
+  --method METHOD       loging method, available: browser, request
+  -g LOGIN_GATEWAY, --login-gateway LOGIN_GATEWAY
+                        address of the portal page, should have scheme (e.g. 'http://...')
+  --interval INTERVAL   interval (s) for connectivity check / retry
+  --debug               enable debug output
+  --silent              disable output in shell
+  --logfile LOGFILE     log file location
+```
+
 ### 直接部署
 
 <details> 
