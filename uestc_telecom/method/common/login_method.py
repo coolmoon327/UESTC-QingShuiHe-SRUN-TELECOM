@@ -49,6 +49,8 @@ class AutoLogin(object):
                 try:
                     self.logger.info("Try login")
                     self.login()
+                    self.logger.info("Login complete")
                 except:
                     pass
+                self.logger.info("Continue monitoring network status")
             sleep(interval)

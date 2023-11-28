@@ -24,7 +24,7 @@ class AutoLogin(BaseAutoLogin):
         self.logger = logger
 
     def login(self) -> bool:
-        self.logger.info("Logging via constructing POST")
+        self.logger.info("Logging in via constructing request")
         try:
             self.logger.debug(
                 f"Getting necessary info from {self.login_gateway + '/eportal/redirectortosuccess.jsp'}"
@@ -61,7 +61,7 @@ class AutoLogin(BaseAutoLogin):
             return False
 
         if response.status_code == 200:
-            self.logger.info("Login via construting request successful")
+            self.logger.info("Login request sent")
             self.logger.debug("Response content:", response.text.encode("uft-8"))
             return True
         else:
