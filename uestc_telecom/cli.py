@@ -1,5 +1,6 @@
 from enum import auto
 import logging
+from logging.handlers import RotatingFileHandler
 import argparse
 import os
 import sys
@@ -77,7 +78,7 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--logfile",
         action="store",
-        default="./log/autologin.log",
+        default=os.path.dirname(os.path.abspath(__file__)) + "/log/autologin.log",
         help="log file location",
     )
 
@@ -88,21 +89,26 @@ if __name__ == "__main__":
     arguments = get_argparser().parse_args()
 
     ## logging
+    logging_level = logging.DEBUG if arguments.debug else logging.INFO
+    logging.basicConfig(level=logging_level)
+    logging.getLogger("").handlers.clear()
+
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     )
-
-    logging_level = logging.DEBUG if arguments.debug else logging.INFO
-    logging.basicConfig(
-        filename=arguments.logfile,
-        level=logging_level,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    )
-
     console_handler.setLevel(logging.DEBUG)
     if not arguments.silent:
         logging.getLogger("").addHandler(console_handler)
+
+    if not os.path.exists(os.path.dirname(arguments.logfile)):
+        os.mkdir(os.path.dirname(arguments.logfile))
+    file_handler = RotatingFileHandler(filename=arguments.logfile, maxBytes=5000000)
+    file_handler.setFormatter(
+        logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+    )
+    file_handler.setLevel(logging_level)
+    logging.getLogger("").addHandler(file_handler)
 
     ## --update-cft
     if arguments.update_cft:
