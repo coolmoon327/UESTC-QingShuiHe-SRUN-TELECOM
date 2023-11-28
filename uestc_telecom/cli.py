@@ -3,7 +3,6 @@ from logging.handlers import RotatingFileHandler
 import argparse
 import os
 import sys
-from method import BrowserAutoLogin, RequestAutoLogin
 
 logger = logging.getLogger(__name__)
 
@@ -142,10 +141,14 @@ if __name__ == "__main__":
 
     match str(arguments.method):
         case "request":
+            from method import RequestAutoLogin
+
             auto_login = RequestAutoLogin(
                 username, arguments.password, arguments.login_gateway
             )
         case "browser":
+            from method import BrowserAutoLogin
+
             auto_login = BrowserAutoLogin(
                 username, arguments.password, arguments.login_gateway
             )
