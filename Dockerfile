@@ -13,6 +13,8 @@ ARG SLIM=0
 
 COPY . .
 
+SHELL ["/bin/bash", "-c"]
+
 RUN apt-get update\
 	&& apt-get install --assume-yes --fix-missing python3.10 python3-pip \
 	&& 	if [[ $SLIM = 0 ]] ; \
