@@ -101,7 +101,7 @@ if __name__ == "__main__":
     console_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     )
-    console_handler.setLevel(logging.DEBUG)
+    console_handler.setLevel(logging_level)
     if not arguments.silent:
         logging.getLogger("").addHandler(console_handler)
 
