@@ -208,11 +208,21 @@ WantedBy=multi-user.target
 
 ### 使用 docker 容器部署
 
-#### A. 下载 docker 镜像 （*预构建镜像尚未更新）
+#### A. 下载 docker 镜像
 *注：由于镜像中需要完整的 Chrome 环境，体积为 ~1450 MB。 如果不需要 `browser` 登录方式，SLIM 镜像体积可减至 ~700 MB*
 
 ```sh
+# x86-64 完整版，体积较大，可以指定 `method` 为 `request` 与 `browser`，适用于大多数场景
 docker pull coolmoon327/uestc-srun-telecom
+
+# x86-64 精简版，体积较小，只能指定 `method` 为 `request`
+docker pull coolmoon327/uestc-srun-telecom-slim
+
+# arm-64 完整版，体积较大，可以指定 `method` 为 `request` 与 `browser`，适用于苹果设备与大多数 arm 设备
+docker pull coolmoon327/uestc-srun-telecom-arm64
+
+# arm-64 精简版，体积较小，只能指定 `method` 为 `request`
+docker pull coolmoon327/uestc-srun-telecom-arm64-slim
 ```
 
 #### B. 使用 dockerfile 自动部署
@@ -224,21 +234,20 @@ docker pull coolmoon327/uestc-srun-telecom
 docker build -t uestc-srun-telecom:latest .
 
 # 构建命令（不含 Chrome 环境，无 browser 登录支持）
+# 在 Dockerfile 设置 ARG SLIM=1
 docker build -t uestc-srun-telecom:latest .
 ```
 
 #### 运行镜像
 
 运行镜像时至少需提供 `SRUN_USERNAME` 和 `SRUN_PASSWORD` 两个环境变量，分别为你的手机号和密码。
+`SRUN_METHOD` 指定登录方式（精简 `request` 或基于浏览器 `browser`）。
 
 ```sh
 # 运行自行构建的镜像
 docker run -e SRUN_USERNAME='手机号' -e SRUN_PASSWORD='默认为12345678' -e SRUN_METHOD='request | browser' uestc-srun-telecom
-```
 
-```sh
-# 运行预构建（下载）的镜像 （*预构建镜像尚未更新）
-docker run -e SRUN_USERNAME='手机号' -e SRUN_PASSWORD='默认为12345678' -e coolmoon327/uestc-srun-telecom:latest
+# 运行预构建镜像：将上述命令中 uestc-srun-telecom 改为你下载的预构建镜像名
 ```
 
 #### NAS 部署（*预构建镜像尚未更新）
