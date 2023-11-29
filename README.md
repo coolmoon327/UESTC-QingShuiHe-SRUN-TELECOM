@@ -250,11 +250,11 @@ docker run -e SRUN_USERNAME='手机号' -e SRUN_PASSWORD='默认为12345678' -e 
 # 运行预构建镜像：将上述命令中 uestc-srun-telecom 改为你下载的预构建镜像名
 ```
 
-#### NAS 部署（*预构建镜像尚未更新）
+#### NAS 部署
 1. 在 NAS 的 docker 软件中找到本项目上传到 Hub 的 uestc-srun-telecom 镜像：
-<div align="center"><img src="https://gitee.com/coolmoon327/picBed/raw/master/pictures/20220110165355.png" style="zoom: 20%;"></div>
-2. 只需要修改两条环境变量即可使用：
-<div align="center"><img src="https://gitee.com/coolmoon327/picBed/raw/master/pictures/20220110165127.png" style="zoom: 30%;"></div>
+<div align="center"><img src="https://github.com/coolmoon327/picBed/raw/master/pictures/20220110165355.png" style="zoom: 20%;"></div>
+2. 添加环境变量 `SRUN_USERNAME` `SRUN_PASSWORD` `SRUN_METHOD`：
+<div align="center"><img src="https://github.com/coolmoon327/picBed/raw/master/pictures/20220110165127.png" style="zoom: 30%;"></div>
 
 ## 更新日志
 - 2023.11.27: 重构了项目结构。添加了更轻量的构造登录请求的自动登录方式（可能随电信登录前端更新而失效，但他们更新的概率很低……）。
