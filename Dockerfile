@@ -1,34 +1,50 @@
-FROM ubuntu:jammy
+FROM python:3.11-alpine as slim
+
 LABEL author="coolmoon327"
 LABEL version="5.0"
 LABEL description="电子科技大学寝室电信网络自动登录"
-WORKDIR /home
+
+WORKDIR /src
 ENV TZ Asia/Shanghai
 ENV SRUN_USERNAME your_username
 ENV SRUN_PASSWORD your_password
 ENV SRUN_METHOD=request
 ENV EXTRA_ARGS=
-ARG DEBIAN_FRONTEND=noninteractivez
-ARG SLIM=0
 
-COPY . .
+ADD ["uestc_telecom/", "cft_dep", "/src/" ]
+
+RUN pip install requests
+
+CMD python /src/cli.py --method $SRUN_METHOD --userid $SRUN_USERNAME --password $SRUN_PASSWORD $EXTRA_ARGS
+
+FROM python:3.11-bookworm as full
+
+LABEL author="coolmoon327"
+LABEL version="5.0"
+LABEL description="电子科技大学寝室电信网络自动登录"
+
+WORKDIR /src
+ENV TZ Asia/Shanghai
+ENV SRUN_USERNAME your_username
+ENV SRUN_PASSWORD your_password
+ENV SRUN_METHOD=browser
+ENV EXTRA_ARGS=
+
+ADD ["uestc_telecom/", "cft_dep", "/src/" ]
 
 SHELL ["/bin/bash", "-c"]
 
-RUN apt-get update\
-	&& apt-get install --assume-yes --fix-missing python3.10 python3-pip \
-	&& 	if [[ $SLIM = 0 ]] ; \
-	then apt-get install --assume-yes --fix-missing $(cat cft_dep) ; \
-	fi \
-	&& apt-get autoclean && apt-get clean && apt-get autoremove 
+RUN pip install requests
 
-RUN if [[ $SLIM = 0 ]] ; \
-	then pip install requests selenium ; \
-	else pip install requests; \
-	fi
+RUN curl -fSsL https://dl.google.com/linux/linux_signing_key.pub | \
+	gpg --dearmor | \
+	tee /usr/share/keyrings/google-chrome.gpg >> /dev/null && \
+	echo deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main | \
+	tee /etc/apt/sources.list.d/google-chrome.list && \
+	apt update
 
-RUN if [[ $SLIM = 0 ]] ; \
-	then python3.10 uestc_telecom/cli.py -u ; \
-	fi
+RUN apt-cache depends google-chrome-stable | apt-get install --assume-yes --fix-missing && \
+	pip install selenium && \
+	python /src/cli.py -u 
 
-CMD python3.10 uestc_telecom/cli.py --method $SRUN_METHOD --userid $SRUN_USERNAME --password $SRUN_PASSWORD $EXTRA_ARGS
+CMD python /src/cli.py --method $SRUN_METHOD --userid $SRUN_USERNAME --password $SRUN_PASSWORD $EXTRA_ARGS
