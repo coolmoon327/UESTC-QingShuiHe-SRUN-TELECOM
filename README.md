@@ -231,10 +231,10 @@ docker pull coolmoon327/uestc-srun-telecom-arm64-slim
 
 ```sh
 # 构建命令
-docker build --target slim -t uestc-srun-telecom:latest .
+docker build --target full -t uestc-srun-telecom:latest .
 
 # 构建命令（不含 Chrome 环境，无 browser 登录支持）
-docker build --target full -t uestc-srun-telecom:latest . 
+docker build --target slim -t uestc-srun-telecom:latest . 
 ```
 
 #### 运行镜像
