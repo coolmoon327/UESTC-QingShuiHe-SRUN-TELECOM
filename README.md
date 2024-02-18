@@ -231,11 +231,10 @@ docker pull coolmoon327/uestc-srun-telecom-arm64-slim
 
 ```sh
 # 构建命令
-docker build -t uestc-srun-telecom:latest .
+docker build --target slim -t uestc-srun-telecom:latest .
 
 # 构建命令（不含 Chrome 环境，无 browser 登录支持）
-# 在 Dockerfile 设置 ARG SLIM=1
-docker build -t uestc-srun-telecom:latest .
+docker build --target full -t uestc-srun-telecom:latest . 
 ```
 
 #### 运行镜像
@@ -257,6 +256,8 @@ docker run -e SRUN_USERNAME='手机号' -e SRUN_PASSWORD='默认为12345678' -e 
 <div align="center"><img src="https://github.com/coolmoon327/picBed/raw/master/pictures/20220110165127.png" style="zoom: 30%;"></div>
 
 ## 更新日志
+- 2024.2.18: 迁移 docker base image 至 python:3.11-alpine
+
 - 2023.11.27: 重构了项目结构。添加了更轻量的构造登录请求的自动登录方式（可能随电信登录前端更新而失效，但他们更新的概率很低……）。
 
 - 2023.11.7: 转为使用[独立的无头chrome for testing及chromedriver](https://developer.chrome.com/blog/chrome-for-testing/)，不再需要完整的chrome环境或配置对应版本的webdriver。
